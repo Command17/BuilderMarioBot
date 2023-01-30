@@ -8,23 +8,31 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.security.auth.login.LoginException;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class Bot {
     public static Logger logger = LoggerFactory.getLogger(Bot.class);
 
-    public static void main(String[] args) throws LoginException {
+    public static JSONObject messageEventJson = null;
+
+    public static void main(String[] args) throws Exception {
         logger.info("Reading token.txt...");
 
         String token = FileUtil.fastReadFile("token.txt", true);
 
-        if (!token.isEmpty() && token != null && token.length() > 0) {
+        try {
+            messageEventJson = FileUtil.fastReadJson("message_event.json", false);
+        } catch (Exception e) {
+            logger.info("No message_event.json found! Continuing  without...");
+            logger.debug("Stack trace:");
+            logger.debug(Arrays.toString(e.getStackTrace()));
+        }
+
+        if (token != null && !token.isEmpty()) {
             logger.info("Done!");
 
             JDA jda = JDABuilder.createLight(token, GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT).setActivity(Activity.playing("m!help")).build();

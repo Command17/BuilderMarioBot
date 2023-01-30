@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'com.github.command17'
-version '0.1.0'
+version '0.1.1'
 
 compileJava.options.encoding = 'UTF-8'
 

@@ -1,22 +1,22 @@
 package com.github.command17.BuilderMarioBot.util;
 
 import org.jetbrains.annotations.Nullable;
-import org.json.JSONObject;
-import org.json.JSONString;
-import org.json.JSONStringer;
-import org.json.JSONWriter;
+import org.json.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 
 public class FileUtil {
     public static Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
+    // File reading.
+
     @Nullable
-    public static String fastReadFile(String path, boolean create) {
+    public static String fastReadFile(String path, boolean create) throws Exception {
         String source = null;
 
         try {
@@ -43,20 +43,35 @@ public class FileUtil {
             }
         } catch (Exception e) {
             logger.error("File not found!");
-            logger.debug(String.valueOf(e.getStackTrace()));
+            logger.debug(Arrays.toString(e.getStackTrace()));
+
+            throw new Exception(Arrays.toString(e.getStackTrace()));
         }
 
         return source;
     }
 
+    // Json file reading.
+
     @Nullable
-    public static JSONObject fastReadJson(String path, boolean create) {
+    public static JSONObject fastReadJson(String path, boolean create) throws Exception {
         JSONObject json = null;
 
-        String source = fastReadFile(path, create);
+        String source = null;
+
+        try {
+            source = fastReadFile(path, create);
+        } catch (Exception ignored) {}
 
         if (source != null && path.endsWith(".json")) {
-            json = new JSONObject(source);
+            try {
+                json = new JSONObject(source);
+            } catch (JSONException e) {
+                logger.error("Json not found!");
+                logger.debug(Arrays.toString(e.getStackTrace()));
+
+                throw new Exception(Arrays.toString(e.getStackTrace()));
+            }
         }
 
         return json;

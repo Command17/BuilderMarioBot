@@ -1,6 +1,6 @@
 package com.github.command17.BuilderMarioBot.events;
 
-import com.github.command17.BuilderMarioBot.util.FileUtil;
+import com.github.command17.BuilderMarioBot.Bot;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
@@ -13,7 +13,7 @@ public class MessageListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (!event.getAuthor().isBot()) {
-            JSONObject json = FileUtil.fastReadJson("message_event.json", false);
+            JSONObject json = Bot.messageEventJson;
 
             Message message = event.getMessage();
 
@@ -23,7 +23,9 @@ public class MessageListener extends ListenerAdapter {
                 if (json.getJSONObject(channel.getId()) != null) {
                     JSONObject channelJson = json.getJSONObject(channel.getId());
 
-                    if (channelJson.getString("type").equals("reaction")) {
+                    String type = channelJson.getString("type");
+
+                    if (type.equals("reaction")) {
                         if (channelJson.getJSONArray("reactions") != null) {
                             JSONArray reactions = channelJson.getJSONArray("reactions");
 

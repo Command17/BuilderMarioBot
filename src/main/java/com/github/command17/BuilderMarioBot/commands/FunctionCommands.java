@@ -8,8 +8,14 @@ import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
 
 public class FunctionCommands extends ListenerAdapter {
+    public static Logger logger = LoggerFactory.getLogger(FunctionCommands.class);
+
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
         if (!event.getAuthor().isBot()) {
@@ -25,7 +31,14 @@ public class FunctionCommands extends ListenerAdapter {
                     String path = msgContent[1];
 
                     if (path != null) {
-                        JSONObject json = FileUtil.fastReadJson(path, false);
+                        JSONObject json = null;
+
+                        try {
+                            json = FileUtil.fastReadJson(path, false);
+                        } catch (Exception e) {
+                            logger.error(path + "not found!");
+                            logger.debug(Arrays.toString(e.getStackTrace()));
+                        }
 
                         if (json != null && !json.isEmpty()) {
                             if (json.getString("type") != null) {

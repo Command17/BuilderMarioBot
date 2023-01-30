@@ -60,6 +60,7 @@ Create a Json with any name.
 Then send it with ``m!send yourfilename.json``
 
 ## Compiling
+(Java 17)
 
 You can also grab a jar from the releases.
 
