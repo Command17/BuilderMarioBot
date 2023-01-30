@@ -19,7 +19,7 @@ public class InfoCommands extends ListenerAdapter {
             if (content.equals("m!bm")) {
                 channel.sendMessage("Yes. I'm Builder Mario!").queue();
             } else if (content.equals("m!bm-bot")) {
-                channel.sendMessage("It's true... I'm a bot <:bot_icon:1064582527270011010>").queue();
+                channel.sendMessage("It's true... I'm a bot").queue();
             } else if (content.equals("m!help")) {
                 String adminHelp = null;
 
